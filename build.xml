@@ -6,7 +6,7 @@
 	<property name="batch.admin.lib.dir"     	value="Webcontent/WEB-INF/lib"/>
 	<property name="batch.admin.war.dir"     	value="dist/war"/>
 	<property name="batch.admin.warfilename"    value="BatchAdmin.war"/>
-	<property name="anthillpro_server" value="https://ahp.thehartford.com" />
+	<property name="anthillpro_server" value="https://ahp.anthillprourl.com" />
 	
 	<path id="batchadmin-build-classpath">
 		<fileset dir="${batch.admin.lib.dir}" includes="**/*.jar"/>
