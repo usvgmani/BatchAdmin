@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                                 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                                 http://www.springframework.org/schema/context
+                                 http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+	<bean id="baseMenu" abstract="true">
+		<property name="prefix" value="#{resourceService.servletPath}" />
+	</bean>
+	<bean id="jobsMenu" class="org.springframework.batch.admin.web.JobsMenu"
+		parent="baseMenu" />
+	<bean id="executionsMenu" class="org.springframework.batch.admin.web.ExecutionsMenu"
+		parent="baseMenu" />
+	<bean id="logoutMenu" class="hig.ecos.batch.admin.menu.LogoutMenu"
+		parent="baseMenu" />
+	<bean id="menuManager"
+		class="org.springframework.batch.admin.web.resources.MenuManager">
+		<property name="menus">
+			<list>
+				<ref bean="jobsMenu" />
+				<ref bean="executionsMenu" />
+				<ref bean="logoutMenu" />
+			</list>
+		</property>
+	</bean>	
+</beans>
+

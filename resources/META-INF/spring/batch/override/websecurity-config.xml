@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/security  
+	   http://www.springframework.org/schema/security/spring-security-3.1.xsd  
+	   http://www.springframework.org/schema/beans     
+       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+	<http use-expressions="true">
+		<intercept-url pattern="/home*" access="isAnonymous()" />
+		<intercept-url pattern="/jobs*" access="isAuthenticated()" />
+		<intercept-url pattern="/jobs/**" access="isAuthenticated()" />
+		<form-login login-page='/home' default-target-url="/jobs"
+			authentication-failure-url="/home?error=true" />
+		<logout logout-success-url="/home?logout" />
+		<anonymous />
+		<session-management	session-authentication-strategy-ref="sas" />
+		<custom-filter position="CONCURRENT_SESSION_FILTER" ref="concurrencyFilter" />
+	</http>
+
+	<authentication-manager>
+		<authentication-provider>
+			<user-service>
+				<user name="prodsupport" password="prodsupport" authorities="ROLE_USER" />
+				<user name="r1user" password="r1user" authorities="ROLE_USER" />
+				<user name="r2user" password="r2user" authorities="ROLE_USER" />
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>
+
+
+	<beans:bean id="concurrencyFilter"
+		class="org.springframework.security.web.session.ConcurrentSessionFilter">
+		<beans:property name="sessionRegistry" ref="sessionRegistry" />
+		<beans:property name="expiredUrl" value="/home?logout" />
+	</beans:bean>
+
+
+	<beans:bean id="sas" class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+		<beans:constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+		<beans:property name="maximumSessions" value="1" />
+	</beans:bean>
+	<beans:bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
+</beans:beans> 

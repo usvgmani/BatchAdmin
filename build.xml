@@ -1,0 +1,42 @@
+<project name="BatchAdmin" default="batch-admin-build">
+	
+	<property name="batch.admin.dbconfig.filename"  value="batch-oracle.properties"/>
+	<property name="batch.admin.resources.dir"  value="resources"/>
+	<property name="batch.admin.classes.dir"    value="build/classes"/>
+	<property name="batch.admin.lib.dir"     	value="Webcontent/WEB-INF/lib"/>
+	<property name="batch.admin.war.dir"     	value="dist/war"/>
+	<property name="batch.admin.warfilename"    value="BatchAdmin.war"/>
+	<property name="anthillpro_server" value="https://ahp.thehartford.com" />
+	
+	<path id="batchadmin-build-classpath">
+		<fileset dir="${batch.admin.lib.dir}" includes="**/*.jar"/>
+	</path>
+
+	<target name="prepare">
+		<delete dir="${batch.admin.war.dir}" />
+		<delete dir="${batch.admin.classes.dir}" />
+		<delete dir="Webcontent/WEB-INF/classes" />
+		<mkdir dir="${batch.admin.war.dir}" />
+		<mkdir dir="${batch.admin.classes.dir}" />
+	</target>
+
+	<target name="compile" depends="prepare">
+		<echo>=== COMPILE ===</echo>
+		<javac includeantruntime="false" debug="on" srcdir="src" destdir="${batch.admin.classes.dir}" 
+			includes="**/*" classpathref ="batchadmin-build-classpath" />
+	</target>
+
+	<target name="batch-admin-build" depends="compile">
+
+		<copy todir="Webcontent/WEB-INF/classes">
+			<fileset dir="${batch.admin.resources.dir}"/>
+		</copy>
+
+		<war destfile="../${batch.admin.war.dir}/${batch.admin.warfilename}"  webxml="Webcontent/WEB-INF/web.xml" basedir="Webcontent">
+			<lib dir="${batch.admin.lib.dir}" />
+			<classes dir="${batch.admin.classes.dir}"/>
+		</war>
+	</target>
+
+</project>
+
